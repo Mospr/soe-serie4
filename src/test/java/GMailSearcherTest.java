@@ -1,4 +1,6 @@
 import com.google.api.services.gmail.model.Message;
+import gmail.GMailSearcher;
+import gmail.GMailUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
