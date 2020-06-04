@@ -7,6 +7,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.Map;
 
+
 public class GMailSender {
 
     public static void replyToEmail(Message messageToReply,String replyTextMessage) throws IOException, MessagingException {
@@ -32,8 +33,7 @@ public class GMailSender {
     public static void sendEmail(String to, String subject, String messageBody) throws IOException, MessagingException {
         MimeMessage email;
 
-        //create reply email by reversing "From" and "To", adding the messageBody and set the same MessageID
-        email = GMailUtils.createEmail(to , "huhn.se2020@gmail.com" , subject,
+        email = GMailUtils.createEmail(to , GMailUtils.getCurrentUserEmailAddress() , subject,
                 messageBody);
 
         Message newMessage = GMailUtils.createMessageWithEmail(email);

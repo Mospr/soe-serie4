@@ -99,6 +99,12 @@ public class GMailUtils {
   }
 
 
+
+  public static String getCurrentUserEmailAddress() throws IOException {
+
+        return (String) GMailServiceSingleTon.getInstance().users().getProfile(Constants.currentUserID).execute().get("emailAddress");
+  }
+
   public static void addLabelsToMessage(Message message, List<String> labelsToAdd) throws IOException {
       Gmail service = GMailServiceSingleTon.getInstance();
 
