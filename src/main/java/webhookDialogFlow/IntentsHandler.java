@@ -36,21 +36,6 @@ import java.util.stream.Collectors;
 
 public class IntentsHandler extends DialogflowApp {
 
-//  @ForIntent("ListMails")
-//  public ActionResponse handleIntentName(ActionRequest request) {
-//    ResponseBuilder responseBuilder = getResponseBuilder(request);
-//  System.out.println("ListMails");
-//    String parameter1 = (String) request.getParameter("ParameterName");
-//
-//    ///... stuff
-//
-//    //endConversation is optional
-//    responseBuilder.add("Response Stuff").endConversation();
-////    responseBuilder.getConversationData().get("")
-//    return responseBuilder.build();
-//  }
-
-
   @ForIntent("DeleteMail")
   public ActionResponse handleDeleteMailIntent(ActionRequest request) throws IOException {
     ResponseBuilder responseBuilder = getResponseBuilder(request);
@@ -63,7 +48,7 @@ public class IntentsHandler extends DialogflowApp {
     List<Message> messagesIds = GMailSearcher.findMessagesWithQuery(queryLabel + ":" + value);
     GMailUtils.trashEmails(messagesIds.stream().map(Message::getId).collect(Collectors.toList()));
 
-    responseBuilder.add("Es wurden " + messagesIds.size() + " Emails gelöscht.");
+    responseBuilder.add("Es wurden " + messagesIds.size() + " Emails gel\u00f6scht.");
 //  responseBuilder.getConversationData().get("")
     return responseBuilder.build();
   }
@@ -116,7 +101,7 @@ public class IntentsHandler extends DialogflowApp {
     String currentMsgId = (String) responseBuilder.getConversationData().get("currentMsgId");
     GMailUtils.trashEmail(currentMsgId);
 
-    responseBuilder.add("Mail erfolgreich gelöscht");
+    responseBuilder.add("Mail erfolgreich gel\u00f6scht");
     return responseBuilder.build();
   }
 
@@ -126,16 +111,14 @@ public class IntentsHandler extends DialogflowApp {
     ResponseBuilder responseBuilder = getResponseBuilder(request);
     String currentMsgId = (String) responseBuilder.getConversationData().get("currentMsgId");
     Message msg = GMailUtils.getEntireMessageFromID(currentMsgId);
-    Map<String, String> headers = GMailUtils.parseMessageHeadersToMap(msg);
-    String mail = headers.get("From");
     String templateType = (String) request.getParameter("templatetype");
     switch (templateType) {
-      case "Kündigungstemplate": Templates.buildTerminationTemplate(responseBuilder, mail);break;
-      case "Entschuldigungstemplate": Templates.buildApologyTemplate(responseBuilder, mail); break;
-      case "Bestätigungstemplate": Templates.buildConfirmTemplate(responseBuilder, mail); break;
+      case "K\u00fcndigungstemplate": Templates.buildTerminationTemplate(responseBuilder, msg);break;
+      case "Entschuldigungstemplate": Templates.buildApologyTemplate(responseBuilder, msg); break;
+      case "Best\u00e4tigungstemplate": Templates.buildConfirmTemplate(responseBuilder, msg); break;
       case "Termintemplate": {
         String date = GMailUtils.dateToString((Date) request.getParameter("date"), "dd.MM.yyyy");
-        Templates.buildMeetingTemplate(responseBuilder, mail, date, null);
+        Templates.buildMeetingTemplate(responseBuilder, date, null, msg);
       } break;
     }
 
@@ -180,9 +163,9 @@ public class IntentsHandler extends DialogflowApp {
       Message message = GMailUtils.getEntireMessageFromID((String) mailList.get(number.intValue() - 1));
 
       Map<String, String> headers = GMailUtils.parseMessageHeadersToMap(message);
-      responseBuilder.add("Sie haben die Mail von " + headers.get("From") + " mit dem Betreff " + headers.get("Subject") + " ausgewählt");
+      responseBuilder.add("Sie haben die Mail von " + headers.get("From") + " mit dem Betreff " + headers.get("Subject") + " ausgew\u00e4hlt");
     } else {
-      responseBuilder.add("Sie konnten keine Mail auswählen");
+      responseBuilder.add("Sie konnten keine Mail ausw\u00e4hlen");
     }
 
     return responseBuilder.build();
